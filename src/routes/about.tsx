@@ -8,6 +8,6 @@ export const Route = createFileRoute('/about')({
   head: () => ({ meta: [{ title: 'About' }] }),
   component: () => <main className="about-reader">
     <aside className="about-reader-title"><h1>{title}</h1></aside>
-    <article className="about-reader-body"><Markdown components={{ h1: () => null }}>{about}</Markdown></article>
+    <div className="about-reader-content"><article className="about-reader-body"><Markdown components={{ h1: () => null }}>{about}</Markdown></article></div>
   </main>,
 })
