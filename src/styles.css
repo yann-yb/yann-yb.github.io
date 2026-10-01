@@ -142,6 +142,7 @@ a:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid va
 .memo-index-entry[aria-current=page]{background:var(--green-bg)}
 .memo-index-entry:hover{color:var(--accent)}
 .notes-workspace{position:relative;height:100%;overflow:hidden}
+@media(min-width:901px){.notes-workspace{overflow-x:auto;scrollbar-width:thin}}
 .note-pane{position:absolute;inset:0 auto 0 var(--pane-left);width:625px;max-width:100%;display:flex;flex-direction:column;background:var(--card);border-right:1px solid var(--border);border-left:1px solid var(--border);transition:left 250ms cubic-bezier(.22,1,.36,1)}
 .note-pane:not(:first-of-type){animation:memo-pane-in 250ms cubic-bezier(.22,1,.36,1)}
 @keyframes memo-pane-in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
@@ -168,8 +169,8 @@ a:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid va
 .note-rail span{writing-mode:vertical-rl;white-space:nowrap}
 .is-folded>.note-rail{opacity:1;visibility:visible}
 .is-folded>.memo-index-content,.is-folded>.note-pane-header,.is-folded>.note-pane-body{opacity:0;visibility:hidden;pointer-events:none}
-.memo-navigation{position:absolute;z-index:5;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;padding:10px 12px;border:1px solid var(--border);border-radius:24px;background:var(--card);box-shadow:var(--shadow)}
-.memo-navigation button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:var(--border)}
+.memo-navigation{max-width:calc(100% - 32px);overflow-x:auto;scrollbar-width:none;position:absolute;z-index:5;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;padding:10px 12px;border:1px solid var(--border);border-radius:24px;background:var(--card);box-shadow:var(--shadow)}
+.memo-navigation button{flex-shrink:0;width:8px;height:8px;padding:0;border:0;border-radius:50%;background:var(--border)}
 .memo-navigation button[aria-current]{background:var(--text)}
 @media(max-width:900px){.note-pane{left:40px;width:calc(100% - 40px);visibility:hidden}.note-pane.is-active{visibility:visible;animation:memo-pane-in 250ms cubic-bezier(.22,1,.36,1)}.memo-index{width:40px}.memo-index-content{display:none}.memo-index>.note-rail{opacity:1;visibility:visible}.memo-index.is-active{width:100%}.memo-index.is-active>.note-rail{opacity:0;visibility:hidden}.memo-index.is-active>.memo-index-content{display:block}}
 @media(max-width:560px){.memo-notes{margin:0 -16px}.memo-index{visibility:hidden}.memo-index.is-active{visibility:visible}.note-pane{left:0;width:100%;border:0}.note-pane-body{padding:24px 24px 72px}}

@@ -34,7 +34,7 @@ function MemoTestPage() {
     if (workspace.current) observer.observe(workspace.current)
     return () => observer.disconnect()
   }, [])
-  const selected = [...new Set((ready ? search.notes || '' : '').split(',').filter(id => id !== 'memo' && noteById.has(id)))]
+  const selected = (ready ? search.notes || '' : '').split(',').filter(id => noteById.has(id))
   const openIds = ['memo', ...selected]
   const activePane = paneSelection.notes === search.notes ? paneSelection.index : selected.length + 1
   function setActivePane(index: number) { setPaneSelection({ notes: search.notes, index }) }
@@ -46,10 +46,21 @@ function MemoTestPage() {
     const pane = panes?.item(panes.length - 1)
     if (search.notes || paneSelection.notes !== search.notes) pane?.focus({ preventScroll: true })
   }, [ready, search.notes])
+  useEffect(() => {
+    if (!ready || !workspace.current) return
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
+    const center = Math.max(activePane * 40, (workspaceWidth - 625) / 2)
+    const revealPane = () => {
+      workspace.current?.scrollTo({ left: activePane === 0 ? 0 : Math.max(0, center + 625 - workspaceWidth), behavior })
+      workspace.current?.parentElement?.querySelector('[aria-current="step"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior })
+    }
+    const frame = window.requestAnimationFrame(revealPane)
+    const settled = window.setTimeout(revealPane, behavior === 'instant' ? 0 : 250)
+    return () => { window.cancelAnimationFrame(frame); window.clearTimeout(settled) }
+  }, [ready, activePane, search.notes, workspaceWidth])
   function openSearch(index: number, id: string) {
     const previous = openIds.slice(0, index + 1)
-    const existing = previous.indexOf(id)
-    const next = existing >= 0 ? previous.slice(0, existing + 1) : [...previous, id]
+    const next = [...previous, id]
     return { notes: next.slice(1).join(',') || undefined }
   }
   function paneStyle(index: number): CSSProperties {
@@ -92,7 +103,7 @@ function MemoTestPage() {
       {openIds.map((id, index) => {
         const note = noteById.get(id)!
         const backlinks = notes.filter(other => other.id !== id && linksTo(other.content, id))
-        return <article className={`note-pane${isFolded(index + 1) ? ' is-folded' : ''}${index + 1 === activePane ? ' is-active' : ''}`} style={paneStyle(index + 1)} key={id} aria-label={note.title} tabIndex={-1}>
+        return <article className={`note-pane${isFolded(index + 1) ? ' is-folded' : ''}${index + 1 === activePane ? ' is-active' : ''}`} style={paneStyle(index + 1)} key={`${id}-${index}`} aria-label={note.title} tabIndex={-1}>
           <button className="note-rail" onClick={() => setActivePane(index + 1)} aria-label={`Show ${note.title}`}><img src="/images/favicon.ico" alt="" width="16" height="16" /><span>{note.title}</span></button>
           <header className="note-pane-header"><button className="note-pane-title" onClick={() => setActivePane(index + 1)}>{note.title}</button><div className="note-pane-actions"><button className="icon-button" onClick={copyLink} aria-label={`Copy ${note.title} link`} title="Copy link"><Link2 size={16} /></button>{index === 0 ? <Link to="/" className="icon-button" aria-label="Close memo" title="Close"><X size={16} /></Link> : <Link to="/memo" search={{ notes: openIds.slice(1, index).join(',') || undefined }} onClick={event => { if (!event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey && event.button === 0) animateClose(index) }} className="icon-button" aria-label={`Close ${note.title} pane`} title="Close"><X size={16} /></Link>}</div></header>
           <div className="note-pane-body">
