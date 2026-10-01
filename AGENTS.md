@@ -36,3 +36,8 @@ Verify S/M dimensions, content fit on desktop and mobile, and whole-tile mouse a
 - Keep backend settings and implementation details out of user-facing UI, including allowlist contents or status, provider configuration, and server setup. Keep these details in repository rules or developer documentation.
 - The email allowlist is currently empty. Login is UI-only and Send code stays disabled; do not add a server, send email, or simulate successful authentication unless requested.
 - When real login is implemented, send codes only to explicitly allowed email addresses. Do not expose the allowlist in the browser.
+
+## Public-site privacy
+
+- Keep the site public, with `public/robots.txt` disallowing compliant crawlers and a global `noindex, nofollow` robots meta tag. These are crawler requests, not access control; public HTML, assets, and repository contents remain readable.
+- Do not imply that the login popup protects published content or that crawler directives guarantee privacy or remove existing search results.

@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 import matter from 'gray-matter'
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { createHash } from 'node:crypto'
 
 // Read Markdown at build time: no filesystem or server calls in the browser.
 function contentPlugin(): Plugin {
@@ -16,6 +17,9 @@ function contentPlugin(): Plugin {
       if (id !== '\0virtual:personal-content') return
       const about = matter(readFileSync(resolve('content/about/_index.md'), 'utf8')).content
       const memo = matter(readFileSync(resolve('content/memo/_index.md'), 'utf8')).content
+      const memoIds = ['memo', ...[...memo.matchAll(/^## (.+)$/gm)].map(match => match[1].toLowerCase().replace(/[^a-z0-9]+/g, '-'))]
+      const memoHashes = Object.fromEntries(memoIds.map(id => [id, createHash('sha256').update(id).digest('hex').slice(0, 6)]))
+      if (new Set(Object.values(memoHashes)).size !== memoIds.length) throw new Error('Memo short IDs must be unique')
       const posts = readdirSync(resolve('content/posts'))
         .filter(name => name.endsWith('.md'))
         .map(name => {
@@ -30,7 +34,7 @@ function contentPlugin(): Plugin {
         })
         .filter(post => !post.draft)
         .sort((a, b) => b.date.localeCompare(a.date))
-      return `export const about = ${JSON.stringify(about)}; export const memo = ${JSON.stringify(memo)}; export const posts = ${JSON.stringify(posts)};`
+      return `export const about = ${JSON.stringify(about)}; export const memo = ${JSON.stringify(memo)}; export const memoHashes = ${JSON.stringify(memoHashes)}; export const posts = ${JSON.stringify(posts)};`
     },
     handleHotUpdate(ctx) {
       if (!ctx.file.includes('/content/') || !ctx.file.endsWith('.md')) return

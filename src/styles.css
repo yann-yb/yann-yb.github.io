@@ -47,6 +47,8 @@ a:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid va
 .company-logo{width:30px;height:30px;border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;font-size:17px;font-weight:650;flex-shrink:0;background:var(--bg)}
 
 .career-dates{margin-left:auto;color:var(--muted);font-size:11px;white-space:nowrap;flex-shrink:0}
+.experience-card .career-dates,.experience-card .career-row div>span,.stars-card .career-row div>span{color:#737373}
+:root[data-theme=dark] .experience-card .career-dates,:root[data-theme=dark] .experience-card .career-row div>span,:root[data-theme=dark] .stars-card .career-row div>span{color:#a3a3a3}
 .career-row:last-of-type{margin-bottom:0}
 
 
@@ -143,7 +145,7 @@ a:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid va
 .memo-index-entry:hover{color:var(--accent)}
 .notes-workspace{position:relative;height:100%;overflow:hidden}
 @media(min-width:901px){.notes-workspace{overflow-x:auto;scrollbar-width:thin}}
-.note-pane{position:absolute;inset:0 auto 0 var(--pane-left);width:625px;max-width:100%;display:flex;flex-direction:column;background:var(--card);border-right:1px solid var(--border);border-left:1px solid var(--border);transition:left 250ms cubic-bezier(.22,1,.36,1)}
+.note-pane{position:absolute;inset:0 auto 0 var(--pane-left);width:var(--pane-width);max-width:100%;display:flex;flex-direction:column;background:var(--card);border-right:1px solid var(--border);border-left:1px solid var(--border);transition:left 250ms cubic-bezier(.22,1,.36,1)}
 .note-pane:not(:first-of-type){animation:memo-pane-in 250ms cubic-bezier(.22,1,.36,1)}
 @keyframes memo-pane-in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
 @keyframes memo-pane-out{to{opacity:0;transform:translateX(24px)}}

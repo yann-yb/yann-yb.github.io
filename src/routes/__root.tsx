@@ -12,6 +12,7 @@ export const Route = createRootRoute({
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { title: '' },
       { name: 'description', content: 'Yihan Bao — software engineer. Systems, infrastructure, notes, and small tools.' },
+      { name: 'robots', content: 'noindex, nofollow' },
       { name: 'color-scheme', content: 'light dark' },
     ],
     links: [{ rel: 'stylesheet', href: styles }, { rel: 'icon', href: '/images/favicon.ico', type: 'image/png' }],
