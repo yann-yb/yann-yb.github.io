@@ -8,7 +8,7 @@ Apply these rules when adding or changing dashboard tiles.
 - **S** uses `card tile-s`: one square, based on the Yihan Bao tile.
 - **M** uses `card tile-m`: two S columns wide and one S square high. Its width includes the grid gap between the two columns.
 - Use the existing `.dashboard-grid` and `--tile-size` styles. Do not introduce custom tile widths, heights, or extra size variants.
-- On phones, S remains square; M fits the screen at a 2:1 width-to-height ratio.
+- On phones, show two S tiles per row. S remains square; M spans both columns and keeps the same height as S. Its width includes the gap between the two squares.
 - Keep content inside the tile at every breakpoint. Adjust content spacing rather than stretching the tile.
 
 ## Navigation

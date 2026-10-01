@@ -67,7 +67,20 @@ a:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid va
 @media(max-width:1343px){.dashboard-grid{--tile-size:calc((100cqw - 32px)/3);grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(min-width:960px) and (max-width:1343px){.dashboard-grid{--tile-size:calc((100cqw - 48px)/4);grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:799px){.site-shell{padding:0 20px}.site-header{margin:0 -20px;padding:0 16px}.dashboard-grid{--tile-size:calc((100cqw - 16px)/2);grid-template-columns:repeat(2,minmax(0,1fr))}.career-row strong{font-size:12px}}
-@media(max-width:560px){.site-shell{padding:0 16px}.site-header{margin:0 -16px}.dashboard{padding-top:20px}.dashboard-grid{--tile-size:100cqw;grid-template-columns:minmax(0,1fr);gap:12px}.card{grid-column:span 1}.tile-m{height:calc(var(--tile-size)/2);padding:12px}.tile-m .card-label{min-height:18px;margin-bottom:8px}.tile-m .career-row{gap:8px;margin-bottom:3px}.tile-m .career-row strong,.tile-m .career-row div>span{font-size:11px;line-height:1.25}.tile-m .company-logo{width:24px;height:24px;font-size:14px}.profile-card p{font-size:14px}.profile-heading{margin-bottom:16px}.article{padding-top:30px}.article>h1,.prose h1{font-size:35px}.prose{font-size:14px}.writing-list a{flex-wrap:wrap}.writing-list h2{flex-basis:100%;margin:0}}
+@media(max-width:560px){
+.site-shell{padding:0 16px}.site-header{margin:0 -16px}.dashboard{padding-top:20px}
+.dashboard-grid{--tile-size:calc((100cqw - 12px)/2);grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{padding:12px;border-radius:20px}.tile-m{grid-column:span 2}
+.card-label{font-size:11px;min-height:16px;margin-bottom:8px}.card-label>svg{width:14px;height:14px}
+.profile-heading{gap:6px;margin-bottom:8px}.profile-heading h1{font-size:14px;line-height:1.2}.profile-heading>span{font-size:12px}.profile-avatar{width:32px;height:32px}
+.profile-card p{font-size:11px;line-height:1.4;margin:0}.profile-links{gap:16px;padding-top:8px}.profile-links svg{width:16px;height:16px}
+.tile-m .career-row{gap:6px;margin-bottom:3px}.tile-m .career-row strong{font-size:10px;line-height:1.2}.tile-m .career-row div>span{font-size:9px;line-height:1.25}.tile-m .company-logo{width:22px;height:22px;font-size:14px}.tile-m .career-dates{font-size:8px}
+.stars-card .favorite-app{gap:6px;min-height:36px;margin-bottom:6px}.stars-card .company-logo{width:20px;height:20px}.stars-card .career-row strong{font-size:11px;line-height:1.25}.stars-card .career-row div>span{font-size:9px;line-height:1.25}.stars-card .favorite-app>svg{display:none}
+.emoji-card .emoji-preview{display:grid;grid-template-columns:repeat(3,22px);gap:6px;margin:8px 0}.emoji-card .emoji-preview .emoji-artwork{width:22px;height:22px}.dashboard .muted{font-size:10px;line-height:1.35}
+.clock-card .world-clocks{gap:4px}.clock-card .world-clock{gap:1px}.clock-card .world-clock-label{font-size:9px;line-height:1.1}.clock-card .world-clock-date{font-size:8px;line-height:1.1}
+.article{padding-top:30px}.article>h1,.prose h1{font-size:35px}.prose{font-size:14px}.writing-list a{flex-wrap:wrap}.writing-list h2{flex-basis:100%;margin:0}
+}
+@media(min-width:561px) and (max-width:1000px) and (max-height:600px) and (orientation:landscape) and (pointer:coarse){.dashboard-grid{--tile-size:calc((100cqw - 16px)/2);grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
 /* Reveal the new theme from the top-right corner in both directions. */
