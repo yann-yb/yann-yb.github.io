@@ -1,0 +1,5 @@
+Blobmoji artwork by the Blobmoji and Noto Emoji contributors.
+Source: https://github.com/C1710/blobmoji
+Revision: 7dd14d2b0141693485fd26bc35817bd290352a79
+SVG artwork is distributed under Apache License 2.0; see LICENSE and contributor files.
+Unmodified artwork; filenames mapped to Unicode emoji identifiers.

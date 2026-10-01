@@ -1,4 +1,10 @@
 .hugo_build.lock
 node_modules/
-public/
+public/assets/
 resources/
+dist/
+.output/
+.tanstack/
+.env
+.env.*
+!.env.example
