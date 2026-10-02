@@ -1,6 +1,7 @@
 import { Moon, Sun } from 'lucide-react'
+import { AuthProvider } from '../components/AuthProvider'
 import { LoginPopup } from '../components/LoginPopup'
-import { createRootRoute, HeadContent, Link, Outlet, Scripts } from '@tanstack/react-router'
+import { createRootRoute, HeadContent, Link, Outlet, Scripts, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { flushSync } from 'react-dom'
 import styles from '../styles.css?url'
@@ -22,6 +23,7 @@ export const Route = createRootRoute({
 })
 
 function Root() {
+  const privateReader = useRouterState({ select: state => state.location.pathname.startsWith('/myshadow') })
   const [dark, setDark] = useState(false)
   useEffect(() => {
     let saved: string | null = null
@@ -43,23 +45,27 @@ function Root() {
       applyTheme()
       return
     }
+    root.style.setProperty('--theme-reveal-radius', `${Math.hypot(window.innerWidth, window.innerHeight) + 48}px`)
     root.classList.add('theme-changing')
     const transition = document.startViewTransition(() => flushSync(applyTheme))
-    const finish = () => root.classList.remove('theme-changing')
+    const finish = () => {
+      root.classList.remove('theme-changing')
+      root.style.removeProperty('--theme-reveal-radius')
+    }
     transition.finished.then(finish, finish)
   }
   return <html lang="en"><head><HeadContent /></head><body>
     <a className="skip-link" href="#main">Skip to content</a>
-    <div className="site-shell">
+    <AuthProvider><div className="site-shell">
       <header className="site-header">
-        <Link to="/" className="wordmark" aria-label="Yann dashboard">.</Link>
+        {privateReader ? <a href="/" className="wordmark" aria-label="Yann dashboard">.</a> : <Link to="/" className="wordmark" aria-label="Yann dashboard">.</Link>}
         <div className="header-actions">
           <button className="icon-button" onClick={toggleTheme} aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'}>{dark ? <Sun size={17} /> : <Moon size={17} />}</button>
-          <LoginPopup />
+          {!privateReader && <LoginPopup />}
         </div>
       </header>
       <div id="main"><Outlet /></div>
     </div>
-    <Scripts />
+    </AuthProvider><Scripts />
   </body></html>
 }

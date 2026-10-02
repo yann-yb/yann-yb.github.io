@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as EmojiRouteImport } from './routes/emoji'
 import { Route as MemoRouteImport } from './routes/memo'
+import { Route as MyshadowRouteImport } from './routes/myshadow'
+import { Route as ReadingRouteImport } from './routes/reading'
 import { Route as WritingRouteImport } from './routes/writing'
 import { Route as PostsSlugRouteImport } from './routes/posts.$slug'
 
@@ -36,6 +38,16 @@ const MemoRoute = MemoRouteImport.update({
   path: '/memo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MyshadowRoute = MyshadowRouteImport.update({
+  id: '/myshadow',
+  path: '/myshadow',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReadingRoute = ReadingRouteImport.update({
+  id: '/reading',
+  path: '/reading',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WritingRoute = WritingRouteImport.update({
   id: '/writing',
   path: '/writing',
@@ -52,6 +64,8 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/emoji': typeof EmojiRoute
   '/memo': typeof MemoRoute
+  '/myshadow': typeof MyshadowRoute
+  '/reading': typeof ReadingRoute
   '/writing': typeof WritingRoute
   '/posts/$slug': typeof PostsSlugRoute
 }
@@ -60,6 +74,8 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/emoji': typeof EmojiRoute
   '/memo': typeof MemoRoute
+  '/myshadow': typeof MyshadowRoute
+  '/reading': typeof ReadingRoute
   '/writing': typeof WritingRoute
   '/posts/$slug': typeof PostsSlugRoute
 }
@@ -69,20 +85,40 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/emoji': typeof EmojiRoute
   '/memo': typeof MemoRoute
+  '/myshadow': typeof MyshadowRoute
+  '/reading': typeof ReadingRoute
   '/writing': typeof WritingRoute
   '/posts/$slug': typeof PostsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/emoji' | '/memo' | '/writing' | '/posts/$slug'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/emoji'
+    | '/memo'
+    | '/myshadow'
+    | '/reading'
+    | '/writing'
+    | '/posts/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/emoji' | '/memo' | '/writing' | '/posts/$slug'
+  to:
+    | '/'
+    | '/about'
+    | '/emoji'
+    | '/memo'
+    | '/myshadow'
+    | '/reading'
+    | '/writing'
+    | '/posts/$slug'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/emoji'
     | '/memo'
+    | '/myshadow'
+    | '/reading'
     | '/writing'
     | '/posts/$slug'
   fileRoutesById: FileRoutesById
@@ -92,6 +128,8 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   EmojiRoute: typeof EmojiRoute
   MemoRoute: typeof MemoRoute
+  MyshadowRoute: typeof MyshadowRoute
+  ReadingRoute: typeof ReadingRoute
   WritingRoute: typeof WritingRoute
   PostsSlugRoute: typeof PostsSlugRoute
 }
@@ -126,6 +164,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MemoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/myshadow': {
+      id: '/myshadow'
+      path: '/myshadow'
+      fullPath: '/myshadow'
+      preLoaderRoute: typeof MyshadowRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reading': {
+      id: '/reading'
+      path: '/reading'
+      fullPath: '/reading'
+      preLoaderRoute: typeof ReadingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/writing': {
       id: '/writing'
       path: '/writing'
@@ -148,6 +200,8 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   EmojiRoute: EmojiRoute,
   MemoRoute: MemoRoute,
+  MyshadowRoute: MyshadowRoute,
+  ReadingRoute: ReadingRoute,
   WritingRoute: WritingRoute,
   PostsSlugRoute: PostsSlugRoute,
 }

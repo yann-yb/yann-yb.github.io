@@ -5,6 +5,8 @@ import matter from 'gray-matter'
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { createHash } from 'node:crypto'
+import { myShadow } from './tools/myShadow'
+import { newsroom } from './tools/newsroom'
 
 // Read Markdown at build time: no filesystem or server calls in the browser.
 function contentPlugin(): Plugin {
@@ -47,6 +49,8 @@ function contentPlugin(): Plugin {
 
 export default defineConfig({
   plugins: [
+    myShadow(),
+    newsroom(),
     contentPlugin(),
     tanstackStart({ prerender: { enabled: true, crawlLinks: true, failOnError: true } }),
     react(),

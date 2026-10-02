@@ -1,0 +1,26 @@
+.myshadow-unavailable{padding:32px 0;color:var(--muted)}
+.myshadow-unavailable h1{font-size:20px;font-weight:500;color:var(--text)}
+.myshadow-reader .memo-index-entry{width:100%;padding:10px 12px;border:0;border-bottom:1px solid var(--border);background:transparent;color:inherit;font:inherit;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.myshadow-reader .memo-index-entry[aria-current=page]{background:var(--green-bg)}
+.myshadow-status{padding:12px;font-size:13px;color:var(--muted)}
+.myshadow-placeholder{position:absolute;left:min(28.333cqw,408px);right:0;padding:32px;margin:0;color:var(--muted);font-size:13px}
+.myshadow-note-link{display:inline;padding:0;border:0;background:transparent;color:var(--accent);font:inherit;text-align:inherit;text-decoration:underline;text-underline-offset:3px}
+.myshadow-image-placeholder{font-size:13px;color:var(--muted)}
+.myshadow-reader .prose [id]{scroll-margin-top:16px}
+@media(max-width:900px){.myshadow-placeholder{display:none}}
+
+.myshadow-reader .prose pre{max-width:100%;overflow-x:auto;white-space:pre}
+.myshadow-reader .prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em}
+.myshadow-reader .prose :not(pre)>code{padding:2px 5px;border-radius:4px;background:var(--green-bg)}
+.myshadow-reader .prose table{display:block;width:100%;overflow-x:auto;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+.myshadow-reader .prose th,.myshadow-reader .prose td{padding:8px 12px;border:1px solid var(--border);text-align:left}
+.myshadow-reader .prose th{background:var(--green-bg);font-weight:500}
+.myshadow-reader .prose input[type=checkbox]{accent-color:var(--accent)}
+.local-diagram{max-width:100%;margin:0 0 20px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card)}
+.local-diagram>img{display:block;max-width:100%;height:auto;margin:0 auto;background:#fff}
+.local-diagram>p{padding:16px;margin:0;font-size:13px;color:var(--muted)}
+.local-diagram>details{padding:10px 14px;font-size:12px;color:var(--muted)}
+.local-diagram summary{cursor:pointer}
+.myshadow-reader .local-diagram pre{margin:12px 0 0;font-size:12px}
+
+.local-mermaid>img{background:var(--card)}
