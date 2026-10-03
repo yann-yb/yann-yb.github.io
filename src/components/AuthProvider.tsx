@@ -20,6 +20,10 @@ interface AuthState {
 }
 const AuthContext = createContext<AuthState | null>(null)
 
+function isValidEmail(value: string) {
+  return value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [devPreview, setDevPreview] = useState(false)
   const [isDevPreviewMode, setDevPreviewMode] = useState(false)
@@ -68,6 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
   async function signInWithEmail(email: string): Promise<SendCodeResult> {
     if (isDevPreviewMode) return email === 'dev' ? 'sent' : 'not-allowed'
+    if (!isValidEmail(email)) return 'not-allowed'
     const client = getSupabase()
     if (!client) return 'error'
     try {
@@ -85,6 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try { localStorage.setItem('dashboard-dev-preview', '1') } catch { /* Preview still works for this visit. */ }
       return true
     }
+    if (!isValidEmail(email)) return false
     const client = getSupabase()
     if (!client) return false
     try {
