@@ -34,7 +34,7 @@ export function LoginPopup() {
     if (request !== generation.current) return
     setBusy(false)
     setResendAt(!isDevPreviewMode && (result === 'sent' || result === 'rate-limited') ? Date.now() + 60_000 : 0); setNow(Date.now())
-    if (result === 'sent') { setStep('code'); setCode(''); setMessage(isDevPreviewMode ? 'Enter dev to open the local preview.' : '') }
+    if (result === 'sent') { setStep('code'); setCode(''); setMessage('') }
     else if (result === 'not-allowed') setMessage('User not allowed.')
     else if (result === 'rate-limited') setMessage('Too many requests. Please try again later.')
     else setMessage('Unable to send a code. Please try again later.')
@@ -67,7 +67,7 @@ export function LoginPopup() {
       if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) event.currentTarget.close()
     }} onClose={reset}>
       <div className="login-heading"><h2 id="login-title">{signedIn ? 'Account' : 'Login'}</h2><button className="icon-button" type="button" aria-label="Close login" onClick={() => dialog.current?.close()}><X size={18} /></button></div>
-      <p id="login-description">{devPreview ? 'Local preview is open.' : signedIn ? 'You are signed in.' : isDevPreviewMode ? 'Use dev for the email and code to preview locally.' : 'Sign in with an email code.'}</p>
+      <p id="login-description">{devPreview ? 'Local preview is open.' : signedIn ? 'You are signed in.' : ''}</p>
       {signedIn ? <button className="login-send" disabled={busy} onClick={logout}>{busy ? 'Signing out…' : 'Sign out'}</button> : loading ? <p role="status">Loading…</p> : !isConfigured ? <p role="status">Login is temporarily unavailable.</p> : <form onSubmit={event => { event.preventDefault(); void (step === 'email' ? sendCode() : verify()) }}>
         {step === 'email' ? <><label htmlFor="login-email">Email address</label><input id="login-email" name="email" type={isDevPreviewMode ? "text" : "email"} autoComplete={isDevPreviewMode ? "off" : "email"} placeholder={isDevPreviewMode ? "dev" : "you@example.com"} autoFocus required value={email} onChange={event => setEmail(event.target.value)} disabled={busy} /></> : <><label htmlFor="login-code">Sign-in code</label><input key="code" id="login-code" name="code" inputMode={isDevPreviewMode ? "text" : "numeric"} autoComplete="one-time-code" pattern={isDevPreviewMode ? undefined : "[0-9]{6}"} maxLength={6} autoFocus required value={code} onChange={event => setCode(isDevPreviewMode ? event.target.value.slice(0, 6) : event.target.value.replace(/\D/g, '').slice(0, 6))} disabled={busy} /></>}
         <button className="login-send" type="submit" disabled={busy || (step === 'email' && remaining > 0)}>{busy ? 'Please wait…' : step === 'code' ? 'Sign in' : remaining > 0 ? `Try again in ${remaining}s` : 'Send code'}</button>

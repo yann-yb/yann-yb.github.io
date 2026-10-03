@@ -14,7 +14,7 @@ function Dashboard() {
   return <main className="dashboard">
     <div className="dashboard-grid">
       {visible('profile') && <section className="card tile-s profile-card">
-        <div className="profile-heading"><img className="profile-avatar" src="/images/avatar.png" alt="My original puppy avatar" width="64" height="64" /><h1>Yihan Bao</h1><span aria-hidden="true">👋</span></div>
+        <div className="profile-heading"><img className="profile-avatar" src="/images/avatar.png" alt="My original puppy avatar" width="64" height="64" /><h1>Yihan</h1><span aria-hidden="true">👋</span></div>
         <p>Software engineer</p>
         <div className="profile-links">
           <a href="https://github.com/yann-yb" aria-label="GitHub" title="GitHub"><Github size={18} aria-hidden="true" /></a>
@@ -35,7 +35,7 @@ function Dashboard() {
       </Link>}
       {visible('stars') && <section className="card tile-s stars-card">
         <div className="card-label">Stars <Star size={16} /></div>
-        <a className="career-row favorite-app" href="https://github.com/Clipy/Clipy">
+        <a className="career-row favorite-app" href="https://clipy-app.com">
           <span className="company-logo"><Clipboard size={16} aria-hidden="true" /></span>
           <div><strong>Clipy</strong><span>Clipboard manager</span></div>
           <ArrowUpRight size={15} aria-hidden="true" />
