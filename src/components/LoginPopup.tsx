@@ -30,11 +30,13 @@ export function LoginPopup() {
     if (busy || Date.now() < resendAt) return
     const request = generation.current
     setBusy(true); setMessage('')
-    setResendAt(isDevPreviewMode ? 0 : Date.now() + 60_000); setNow(Date.now())
-    const ok = await signInWithEmail(email.trim())
+    const result = await signInWithEmail(email.trim())
     if (request !== generation.current) return
     setBusy(false)
-    if (ok) { setStep('code'); setCode(''); setMessage(isDevPreviewMode ? 'Enter dev to open the local preview.' : 'Check your inbox for a sign-in code.') }
+    setResendAt(!isDevPreviewMode && (result === 'sent' || result === 'rate-limited') ? Date.now() + 60_000 : 0); setNow(Date.now())
+    if (result === 'sent') { setStep('code'); setCode(''); setMessage(isDevPreviewMode ? 'Enter dev to open the local preview.' : 'Check your inbox for a sign-in code.') }
+    else if (result === 'not-allowed') setMessage('User not allowed.')
+    else if (result === 'rate-limited') setMessage('Too many requests. Please try again later.')
     else setMessage('Unable to send a code. Please try again later.')
   }
   async function verify() {

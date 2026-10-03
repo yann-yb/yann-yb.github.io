@@ -3,6 +3,7 @@ import type { Session, User } from '@supabase/supabase-js'
 import { getSupabase } from '../lib/supabase'
 
 type Authorization = 'signed-out' | 'checking' | 'approved' | 'denied' | 'error'
+type SendCodeResult = 'sent' | 'not-allowed' | 'rate-limited' | 'error'
 
 interface AuthState {
   user: User | null
@@ -13,7 +14,7 @@ interface AuthState {
   authorization: Authorization
   isApproved: boolean
   refreshAuthorization: () => void
-  signInWithEmail: (email: string) => Promise<boolean>
+  signInWithEmail: (email: string) => Promise<SendCodeResult>
   verifyCode: (email: string, code: string) => Promise<boolean>
   signOut: () => Promise<boolean>
 }
@@ -68,14 +69,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setApproval(null)
     setApprovalRevision(value => value + 1)
   }
-  async function signInWithEmail(email: string) {
-    if (isDevPreviewMode) return email === 'dev'
+  async function signInWithEmail(email: string): Promise<SendCodeResult> {
+    if (isDevPreviewMode) return email === 'dev' ? 'sent' : 'not-allowed'
     const client = getSupabase()
-    if (!client) return false
+    if (!client) return 'error'
     try {
       const { error } = await client.auth.signInWithOtp({ email, options: { shouldCreateUser: false } })
-      return !error
-    } catch { return false }
+      if (!error) return 'sent'
+      if (error.code === 'otp_disabled' && error.message === 'Signups not allowed for otp') return 'not-allowed'
+      if (error.status === 429) return 'rate-limited'
+      return 'error'
+    } catch { return 'error' }
   }
   async function verifyCode(email: string, code: string) {
     if (isDevPreviewMode) {
