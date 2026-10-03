@@ -59,7 +59,11 @@ export function LoginPopup() {
   }
   return <>
     <button className="login-button" onClick={() => dialog.current?.showModal()}>{signedIn ? 'Account' : 'Login'}</button>
-    <dialog className="login-dialog" ref={dialog} aria-labelledby="login-title" aria-describedby="login-description" onClick={event => { if (event.target === event.currentTarget) dialog.current?.close() }} onClose={reset}>
+    <dialog className="login-dialog" ref={dialog} aria-labelledby="login-title" aria-describedby="login-description" onClick={event => {
+      if (event.target !== event.currentTarget) return
+      const bounds = event.currentTarget.getBoundingClientRect()
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) event.currentTarget.close()
+    }} onClose={reset}>
       <div className="login-heading"><h2 id="login-title">{signedIn ? 'Account' : 'Login'}</h2><button className="icon-button" type="button" aria-label="Close login" onClick={() => dialog.current?.close()}><X size={18} /></button></div>
       <p id="login-description">{devPreview ? 'Local preview is open.' : signedIn ? 'You are signed in.' : isDevPreviewMode ? 'Use dev for the email and code to preview locally.' : 'Sign in with an email code.'}</p>
       {signedIn ? <button className="login-send" disabled={busy} onClick={logout}>{busy ? 'Signing out…' : 'Sign out'}</button> : loading ? <p role="status">Loading…</p> : !isConfigured ? <p role="status">Login is temporarily unavailable.</p> : <form onSubmit={event => { event.preventDefault(); void (step === 'email' ? sendCode() : verify()) }}>
