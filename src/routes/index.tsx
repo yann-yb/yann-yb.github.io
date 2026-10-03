@@ -9,8 +9,8 @@ import { isWidgetVisible, widgets } from '../lib/widgets'
 export const Route = createFileRoute('/')({ component: Dashboard })
 
 function Dashboard() {
-  const { isApproved, devPreview } = useAuth()
-  const visible = (id: keyof typeof widgets) => isWidgetVisible(id, { approved: isApproved || devPreview, development: import.meta.env.DEV })
+  const { isAuthenticated, devPreview } = useAuth()
+  const visible = (id: keyof typeof widgets) => isWidgetVisible(id, { authenticated: isAuthenticated || devPreview, development: import.meta.env.DEV })
   return <main className="dashboard">
     <div className="dashboard-grid">
       {visible('profile') && <section className="card tile-s profile-card">

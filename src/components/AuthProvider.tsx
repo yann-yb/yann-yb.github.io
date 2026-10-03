@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import type { Session, User } from '@supabase/supabase-js'
 import { getSupabase } from '../lib/supabase'
 
-type Authorization = 'signed-out' | 'checking' | 'approved' | 'denied' | 'error'
+type Authorization = 'signed-out' | 'checking' | 'authenticated' | 'denied' | 'error'
 type SendCodeResult = 'sent' | 'not-allowed' | 'rate-limited' | 'error'
 
 interface AuthState {
@@ -12,7 +12,7 @@ interface AuthState {
   devPreview: boolean
   isDevPreviewMode: boolean
   authorization: Authorization
-  isApproved: boolean
+  isAuthenticated: boolean
   refreshAuthorization: () => void
   signInWithEmail: (email: string) => Promise<SendCodeResult>
   verifyCode: (email: string, code: string) => Promise<boolean>
@@ -26,9 +26,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const user = session?.user ?? null
   const token = session?.access_token
-  const [approval, setApproval] = useState<{ token: string; state: Authorization } | null>(null)
-  const [approvalRevision, setApprovalRevision] = useState(0)
-  const authorization: Authorization = !user ? 'signed-out' : approval && approval.token === token ? approval.state : 'checking'
+  const [validation, setValidation] = useState<{ token: string; state: Authorization } | null>(null)
+  const [validationRevision, setValidationRevision] = useState(0)
+  const authorization: Authorization = !user ? 'signed-out' : validation && validation.token === token ? validation.state : 'checking'
   const [loading, setLoading] = useState(true)
   const [isConfigured, setConfigured] = useState(false)
   useEffect(() => {
@@ -49,25 +49,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe()
   }, [])
   useEffect(() => {
-    if (!token) { setApproval(null); return }
+    if (!token) { setValidation(null); return }
     const client = getSupabase()
-    if (!client) { setApproval(null); return }
-    const controller = new AbortController()
-    setApproval(null)
-    void client.functions.invoke('newsroom-api/session', {
-      method: 'GET', headers: { Authorization: `Bearer ${token}` }, signal: controller.signal, timeout: 15_000,
-    }).then(({ data, error }) => {
-      if (controller.signal.aborted) return
-      const status = error?.context instanceof Response ? error.context.status : undefined
-      setApproval({ token, state: !error && data?.authorized === true ? 'approved' : status === 401 || status === 403 ? 'denied' : 'error' })
+    if (!client) { setValidation(null); return }
+    let cancelled = false
+    setValidation(null)
+    void client.auth.getUser(token).then(({ data, error }) => {
+      if (cancelled) return
+      setValidation({ token, state: !error && data.user?.email_confirmed_at ? 'authenticated' : error?.status === 401 || error?.status === 403 || (!error && !data.user?.email_confirmed_at) ? 'denied' : 'error' })
     }).catch(() => {
-      if (!controller.signal.aborted) setApproval({ token, state: 'error' })
+      if (!cancelled) setValidation({ token, state: 'error' })
     })
-    return () => controller.abort()
-  }, [token, approvalRevision])
+    return () => { cancelled = true }
+  }, [token, validationRevision])
   function refreshAuthorization() {
-    setApproval(null)
-    setApprovalRevision(value => value + 1)
+    setValidation(null)
+    setValidationRevision(value => value + 1)
   }
   async function signInWithEmail(email: string): Promise<SendCodeResult> {
     if (isDevPreviewMode) return email === 'dev' ? 'sent' : 'not-allowed'
@@ -108,7 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return !error
     } catch { return false }
   }
-  return <AuthContext.Provider value={{ user, loading, isConfigured, devPreview, isDevPreviewMode, authorization, isApproved: authorization === 'approved', refreshAuthorization, signInWithEmail, verifyCode, signOut }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, loading, isConfigured, devPreview, isDevPreviewMode, authorization, isAuthenticated: authorization === 'authenticated', refreshAuthorization, signInWithEmail, verifyCode, signOut }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

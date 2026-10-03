@@ -6,7 +6,7 @@ Apply these rules when adding or changing dashboard tiles.
 
 - Maintain a shared widget catalog with `public`, `private`, and `dev` access categories.
 - Existing profile, clocks, Experience, Emoji, Stars, and Memo are public and remain visible regardless of login.
-- Newsroom is private. On the deployed site, its tile and data require backend-approved real login. Hiding a tile alone is not security.
+- Newsroom is private. On the deployed site, its tile and data require verified Supabase login. Hiding a tile alone is not security.
 - MyShadow is dev: show it only with the loopback development runtime. It does not require login. Never expose or upload local notes through the public website.
 - Loopback development initially shows public and dev widgets. Its local-only preview login accepts `dev` as the email-field value and `dev` as the code; Send code only advances the form and sends no email or cloud request. A successful preview login reveals private widget previews. Logout clears preview data.
 - Development preview authentication must be explicitly distinct from real Supabase authorization. Never issue a fake cloud token, fetch private backend data using preview credentials, or include the preview bypass in production behavior. Require both a development build and loopback host. Direct private-preview routes must enforce the preview session too.
@@ -71,7 +71,7 @@ Use these named navigation contracts when implementing or changing panel views. 
 ## UI copy and login
 
 - Keep backend settings and implementation details out of user-facing UI, including allowlist contents or status, provider configuration, and server setup. Keep these details in repository rules or developer documentation.
-- Real Supabase email-code login is authorized. Disable automatic account creation, restrict hosted sign-ups, and enforce approved-user access on the backend. Keep real email addresses and server credentials out of Git. Do not send real email or modify cloud settings without authorization.
+- Real Supabase email-code login is authorized. Disable automatic account creation, restrict hosted sign-ups, and verify Supabase users on the backend. Keep real email addresses and server credentials out of Git. Do not send real email or modify cloud settings without authorization.
 - When real login is implemented, send codes only to explicitly allowed email addresses. Do not expose the allowlist in the browser.
 
 ## Public-site privacy
@@ -93,9 +93,9 @@ Start the local reader with `MYSHADOW_ROOT="/path/to/notes" npm run dev`. No wor
 
 ## Private Newsroom
 
-- Production Newsroom requires a persistent same-origin Supabase session and a successful backend approval check. Hiding a widget is not access control; every API request and database policy must enforce approval.
+- Production Newsroom requires a persistent same-origin Supabase session with a verified user. Hiding a widget is not access control; every API request and database policy must enforce verified-user access.
 - Store private news and read marks in the backend. Clear feed and analysis state on logout or account change, cancel pending requests, and ignore stale responses. Never fall back to local data when cloud authorization fails.
-- Newsroom preview requires the local-only development login on loopback. Preview reads public headlines and must never read private local notes or real private cloud data. Production always uses approved real authentication.
+- Newsroom preview requires the local-only development login on loopback. Preview reads public headlines and must never read private local notes or real private cloud data. Production always uses verified real authentication.
 
 ## Local Newsroom
 

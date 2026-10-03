@@ -21,7 +21,7 @@ Official references:
 - https://supabase.com/docs/guides/auth/auth-smtp
 - https://supabase.com/docs/guides/database/postgres/row-level-security
 
-`useAuth()` separates signed-in identity from backend approval. Its `authorization` state is signed-out, checking, approved, denied, or error; `isApproved` becomes true only after the authenticated `GET /functions/v1/newsroom-api/session` returns `{ "authorized": true }`. Widgets must gate private loading on this state, clear data on logout/account change, and still rely on backend authorization on every request. Authorization requests are cancelled on session changes and old responses cannot approve a new session. `refreshAuthorization()` retries a failed check.
+`useAuth()` validates the Supabase user with `auth.getUser` before exposing private widgets. It does not call a widget backend or a separate approval list to show tiles. Each backend request still verifies the Supabase token, and database policies enforce verified active users and ownership of read marks. Logout/account changes clear private state; stale validation responses are ignored. `refreshAuthorization()` rechecks the Supabase user. The Newsroom API must still be deployed for its content to load.
 
 For GitHub Pages builds, set repository Actions variables named `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`; the workflow passes these public values to Vite. No repository variables or cloud settings were changed by the local implementation.
 

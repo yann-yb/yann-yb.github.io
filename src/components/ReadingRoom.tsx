@@ -21,10 +21,10 @@ export function ReadingTile() {
 }
 
 export function ReadingRoom() {
-  const { user, loading, isApproved, authorization, refreshAuthorization, devPreview, isDevPreviewMode } = useAuth()
+  const { user, loading, isAuthenticated, authorization, refreshAuthorization, devPreview, isDevPreviewMode } = useAuth()
   if (loading) return <main className="newsroom"><h1>Newsroom</h1><p className="newsroom-status">Loading…</p></main>
   if (isDevPreviewMode && devPreview) return <NewsroomSession key="local-preview" access={{ mode: 'local' }} />
-  if (!isDevPreviewMode && user && isApproved) return <NewsroomSession key={user.id} access={{ mode: 'cloud', userId: user.id }} onAccessLost={refreshAuthorization} />
+  if (!isDevPreviewMode && user && isAuthenticated) return <NewsroomSession key={user.id} access={{ mode: 'cloud', userId: user.id }} onAccessLost={refreshAuthorization} />
   return <main className="newsroom"><h1>Newsroom</h1><p className="newsroom-status">{authorization === 'checking' ? 'Checking access…' : authorization === 'error' ? 'Couldn’t check access.' : user ? 'Newsroom unavailable.' : 'Sign in to read your news.'}</p>{authorization === 'error' && <button className="newsroom-refresh" onClick={refreshAuthorization}>Try again</button>}</main>
 }
 

@@ -11,7 +11,7 @@ export const widgets = {
   myshadow: 'dev',
 } as const satisfies Record<string, WidgetAccess>
 
-export function isWidgetVisible(id: keyof typeof widgets, context: { approved: boolean; development: boolean }) {
+export function isWidgetVisible(id: keyof typeof widgets, context: { authenticated: boolean; development: boolean }) {
   const access: WidgetAccess = widgets[id]
-  return access === 'public' || (access === 'private' ? context.approved : context.development)
+  return access === 'public' || (access === 'private' ? context.authenticated : context.development)
 }
