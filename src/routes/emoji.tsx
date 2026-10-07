@@ -8,23 +8,28 @@ import emojibase from 'emojibase-data/en/shortcodes/emojibase.json'
 import messages from 'emojibase-data/en/messages.json'
 
 const emojis = data.flatMap(emoji => [emoji, ...(emoji.skins || [])])
-  .sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity))
+  .sort((a, b) => a.label.localeCompare(b.label) || a.hexcode.localeCompare(b.hexcode))
   .map(emoji => {
     const githubCodes = github[emoji.hexcode]
     const codes = githubCodes || emojibase[emoji.hexcode] || []
     const shortcuts = (Array.isArray(codes) ? codes : [codes]).map(code => `:${code}:`)
     const emoticons = emoji.emoticon ? (Array.isArray(emoji.emoticon) ? emoji.emoticon : [emoji.emoticon]) : []
+    const unicode = emoji.hexcode.split('-').map(code => `U+${code}`).join(' ')
     return {
       id: emoji.hexcode,
       glyph: emoji.emoji,
       label: emoji.label,
       group: emoji.group ?? -1,
+      unicode,
       shortcuts,
       provider: githubCodes ? 'GitHub' : 'Emojibase',
       emoticons,
-      search: [emoji.label, emoji.emoji, ...(emoji.tags || []), ...shortcuts, ...emoticons].join(' ').toLowerCase(),
+      search: [emoji.label, emoji.emoji, unicode, ...(emoji.tags || []), ...shortcuts, ...emoticons].join(' ').toLowerCase(),
     }
   })
+
+const commonEmoji = ['😀', '😃', '😄', '😁', '😂', '🤣', '😊', '🙂', '😉', '😍', '🥰', '😘', '😎', '🤔', '😢', '😭', '😡', '😱', '🙏', '👍', '👎', '👏', '❤️', '💔', '💯', '🔥', '🎉', '✨', '⭐', '🚀', '✅', '❌', '🐶', '🐱', '🍕', '☕']
+const commonRank = new Map(commonEmoji.map((glyph, index) => [glyph, index]))
 
 export const Route = createFileRoute('/emoji')({
   head: () => ({ meta: [{ title: 'Emoji' }] }),
@@ -38,7 +43,9 @@ function EmojiBrowser() {
   const [notice, setNotice] = useState('')
   const filtered = useMemo(() => {
     const term = query.trim().toLowerCase()
-    return emojis.filter(emoji => (group === 'all' || emoji.group === Number(group)) && (!term || emoji.search.includes(term)))
+    const results = emojis.filter(emoji => (group === 'all' || emoji.group === Number(group)) && (!term || emoji.search.includes(term)))
+    if (group !== 'all') return results
+    return results.sort((a, b) => (commonRank.get(a.glyph) ?? Infinity) - (commonRank.get(b.glyph) ?? Infinity) || a.label.localeCompare(b.label) || a.id.localeCompare(b.id))
   }, [query, group])
   async function copy(value: string) {
     try {
@@ -66,6 +73,7 @@ function EmojiBrowser() {
       {filtered.slice(0, limit).map(emoji => <section className="emoji-entry" key={emoji.id}>
         <div className="emoji-entry-heading"><button className="emoji-glyph emoji-icon" onClick={() => copy(emoji.glyph)} aria-label={`Copy ${emoji.label} emoji`}><EmojiArtwork glyph={emoji.glyph} /></button><h2>{emoji.label}</h2></div>
         <div className="emoji-shortcuts">
+          <button className="shortcut-button" onClick={() => copy(emoji.unicode)} aria-label={`Copy ${emoji.unicode} Unicode code point`} title="Unicode code point"><code>{emoji.unicode}</code></button>
           {emoji.shortcuts.map(shortcut => <button key={shortcut} className="shortcut-button" onClick={() => copy(shortcut)} aria-label={`Copy ${shortcut} shortcut`} title={`${emoji.provider} shortcode`}><code>{shortcut}</code></button>)}
           {emoji.emoticons.map(emoticon => <button key={emoticon} className="shortcut-button emoticon-button" onClick={() => copy(emoticon)} aria-label={`Copy ${emoticon} emoticon`} title="Classic emoticon"><code>{emoticon}</code></button>)}
           {!emoji.shortcuts.length && !emoji.emoticons.length && <span className="muted">No text shortcut</span>}
