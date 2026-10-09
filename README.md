@@ -23,8 +23,6 @@ The static website is emitted to `dist/client`.
 
 `.github/workflows/pages.yaml` builds and deploys on pushes to `master`. The repository’s Pages source must be GitHub Actions. No backend is required for this version. Server functions or private API integrations need a runtime host instead of GitHub Pages.
 
-Existing Hugo configuration and theme are retained for reference; the dashboard build does not use them.
-
 ## Emoji mini app
 
 Open `/emoji` for the searchable Emojibase catalog, including skin-tone variants, GitHub shortcodes (Emojibase fallback), and classic emoticons where defined. Copy buttons use the clipboard. Text shortcuts only convert in apps that support them. The dataset is bundled locally; the app does not need a remote API.
