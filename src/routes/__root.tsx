@@ -17,7 +17,7 @@ export const Route = createRootRoute({
       { name: 'robots', content: 'noindex, nofollow' },
       { name: 'color-scheme', content: 'light dark' },
     ],
-    links: [{ rel: 'stylesheet', href: styles }, { rel: 'icon', href: '/images/favicon.ico', type: 'image/png' }],
+    links: [{ rel: 'stylesheet', href: styles }, { rel: 'icon', href: '/images/favicon.png', type: 'image/png' }],
   }),
   component: Root,
   notFoundComponent: () => <main className="article"><h1>Nothing here yet.</h1><Link to="/">Back to the dashboard →</Link></main>,
