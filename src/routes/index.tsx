@@ -24,9 +24,9 @@ function Dashboard() {
       {visible('clocks') && <Clock />}
       {visible('experience') && <Link className="card tile-m experience-card clickable-card" to="/about" aria-label="Experience">
         <div className="card-label">Experience <BriefcaseBusiness size={15} /></div>
-        <div className="career-row"><span className="company-logo nvidia">N</span><div><strong>NVIDIA</strong><span>DGXCloud</span></div><span className="career-dates">Mar 2025 – now</span></div>
-        <div className="career-row"><span className="company-logo oracle">O</span><div><strong>Oracle Cloud Infrastructure</strong><span>Network dataplane</span></div><span className="career-dates">Nov 2020 – Mar 2025</span></div>
-        <div className="career-row"><span className="company-logo amadeus">a</span><div><strong>Amadeus</strong><span>C++ and cloud infra</span></div><span className="career-dates">Jan 2018 – Nov 2020</span></div>
+        <div className="career-row"><span className="company-logo nvidia">N</span><div><strong>NVIDIA</strong><span>DGXCloud</span></div><span className="career-dates">2025 – now</span></div>
+        <div className="career-row"><span className="company-logo oracle">O</span><div><strong>Oracle Cloud Infrastructure</strong><span>Network dataplane</span></div><span className="career-dates">2020 – 2025</span></div>
+        <div className="career-row"><span className="company-logo amadeus">a</span><div><strong>Amadeus</strong><span>C++ and cloud infra</span></div><span className="career-dates">2017 – 2020</span></div>
       </Link>}
       {visible('emoji') && <Link className="card tile-s emoji-card clickable-card" to="/emoji" aria-label="Emoji">
         <div className="card-label">Emoji <Smile size={18} /></div>
